@@ -1,0 +1,16 @@
+server:
+  port: 8080
+spring:
+  application:
+    name: empc-java
+  jpa:
+    hibernate:
+      ddl-auto: update
+  autoconfigure:
+    exclude:
+    -  org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+  data:
+    mongodb:
+      uri: mongodb+srv://harrydb:mongo2024@cluster0.ucymc7m.mongodb.net/tododb?retryWrites=true&w=majority&appName=Cluster0
+      database: tododb
+      authentication-database: admin
