@@ -3,7 +3,7 @@ package com.springboot.empc.entity;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
-
+import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.data.mongodb.core.index.Indexed;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -18,25 +18,41 @@ public class Employee {
   public static final String SEQUENCE_NAME = "emp_sequence";
 
   @Id
-  private Long id;
+  @Field(name = "id")
+  private Long empId;
   @NotBlank
   @Size(max = 50)
   @Indexed(unique = true)
   private String name;
   private String address;
   private String mobile;
+  private String password;
+  private String otp;
   @NotBlank
   @Size(max = 100)
   @Indexed(unique = true)
   private String email;
   private boolean active;
+  @Field(name = "is_admin")
+  boolean isAdmin;
+  @Field(name = "created_at")
+  Long createdAt;
+  @Field(name = "updated_at")
+  Long updatedAt;
 
-  public Employee(String name, String address, String mobile, String email, boolean active) {
+  public Employee(String name, String address, String mobile, String password, String otp, String email, boolean active,
+      boolean admin,
+      long createdAt, long updatedAt) {
     this.name = name;
     this.address = address;
     this.mobile = mobile;
+    this.password = password;
+    this.otp = otp;
     this.email = email;
     this.active = active;
+    this.isAdmin = admin;
+    this.createdAt = createdAt;
+    this.updatedAt = updatedAt;
   }
 
 }

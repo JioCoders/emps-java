@@ -4,12 +4,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import org.springframework.http.ResponseEntity;
+
 import com.springboot.empc.entity.Employee;
+import com.springboot.empc.model.req.ReqLogin;
+import com.springboot.empc.model.res.ResLogin;
+import com.springboot.empc.model.res.ResponseEmpList;
 
 public interface IEmpService {
-    public List<Employee> findAll();
+    public ResponseEntity<ResponseEmpList> findAll(String token);
 
-    public List<Employee> findByNameContaining(String name);
+    public ResponseEntity<ResponseEmpList> findByNameContaining(String token, String name);
 
     public Optional<Employee> findById(Long id);
 
@@ -22,4 +27,6 @@ public interface IEmpService {
     public Map<String, Boolean> deleteAll();
 
     public List<Employee> findByActive(boolean isActive);
+
+    public ResponseEntity<ResLogin> loginEmp(ReqLogin request);
 }

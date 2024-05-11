@@ -1,6 +1,5 @@
 package com.springboot.empc;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,10 +19,18 @@ public class TaskRunnable implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         log.info("---------> Inserting dummy data in Employee table");
-        emplyeeService.save(new Employee("Ramesh", "Fadatare", "8888888889", "ramesh@gmail.com", true));
-        emplyeeService.save(new Employee("Tom", "Cruise", "8888888889", "tom@gmail.com", true));
-        emplyeeService.save(new Employee("John", "Cena", "8888888889", "john@gmail.com", true));
-        emplyeeService.save(new Employee("tony", "stark", "8888888889", "stark@gmail.com", true));
+        emplyeeService.save(
+                new Employee("Ramesh", "Fadatare", "8888888889", "112233", "332211", "ramesh@gmail.com",
+                        true, false, 1715283934L, 1715283934L));
+        emplyeeService.save(
+                new Employee("Tom", "Cruise", "8888888889", "112233", "332211", "tom@gmail.com", true, false,
+                        1715283934L, 1715283934L));
+        emplyeeService.save(
+                new Employee("John", "Cena", "8888888889", "112233", "332211", "john@gmail.com", true, false,
+                        1715283934L, 1715283934L));
+        emplyeeService.save(
+                new Employee("tony", "stark", "8888888889", "112233", "332211", "stark@gmail.com", true, false,
+                        1715283934L, 1715283934L));
 
         long id1 = 1L;
         emplyeeService.findById(id1).ifPresent(System.out::println);
@@ -37,8 +44,8 @@ public class TaskRunnable implements CommandLineRunner {
             System.out.printf("No employee found with id %d%n", id2);
         }
 
-        List<Employee> employees = emplyeeService.findAll();
-        employees.forEach(employee -> System.out.println(employee.toString()));
+        // List<Employee> employees = emplyeeService.findAll();
+        // employees.forEach(employee -> System.out.println(employee.toString()));
         log.info("---------> Initial data inserted in Employee table");
 
         // emplyeeService.deleteById(3L);

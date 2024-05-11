@@ -11,6 +11,6 @@ spring:
     -  org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
   data:
     mongodb:
-      uri: mongodb+srv://use-your-mongodb-url&appName=Cluster0
+      uri: <your-url>
       database: tododb
       authentication-database: admin
