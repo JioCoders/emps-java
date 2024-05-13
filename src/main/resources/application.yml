@@ -8,9 +8,9 @@ spring:
       ddl-auto: update
   autoconfigure:
     exclude:
-    -  org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+    - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
   data:
     mongodb:
-      uri: <your-url>
+      uri: <?
       database: tododb
       authentication-database: admin

@@ -24,7 +24,7 @@ public class Employee {
   @Size(max = 50)
   @Indexed(unique = true)
   private String name;
-  private String address;
+  private Address address;
   private String mobile;
   private String password;
   private String otp;
@@ -40,8 +40,9 @@ public class Employee {
   @Field(name = "updated_at")
   Long updatedAt;
 
-  public Employee(String name, String address, String mobile, String password, String otp, String email, boolean active,
-      boolean admin,
+  public Employee(String name, Address address, String mobile, String password, String otp, String email,
+      boolean active,
+      boolean isAdmin,
       long createdAt, long updatedAt) {
     this.name = name;
     this.address = address;
@@ -50,7 +51,7 @@ public class Employee {
     this.otp = otp;
     this.email = email;
     this.active = active;
-    this.isAdmin = admin;
+    this.isAdmin = isAdmin;
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
   }

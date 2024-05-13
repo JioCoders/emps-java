@@ -11,7 +11,7 @@ import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 
-import com.springboot.empc.entity.DatabaseSequence;
+import com.springboot.empc.model.DatabaseSequence;
 
 @Service
 public class SequenceGeneratorService {
@@ -29,6 +29,5 @@ public class SequenceGeneratorService {
                 new Update().inc("seq", 1), options().returnNew(true).upsert(true),
                 DatabaseSequence.class);
         return !Objects.isNull(counter) ? counter.getSeq() : 1;
-
     }
 }

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -14,9 +15,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.springboot.empc.entity.Employee;
+import com.springboot.empc.model.ResponseBase;
 import com.springboot.empc.model.req.ReqLogin;
 import com.springboot.empc.model.res.ResLogin;
-import com.springboot.empc.model.res.ResponseEmpList;
+import com.springboot.empc.model.res.ResEmpList;
 import com.springboot.empc.model.res.data.EmpData;
 import com.springboot.empc.model.res.data.LoginData;
 import com.springboot.empc.repository.EmpRepository;
@@ -42,8 +44,8 @@ public class EmpService implements IEmpService {
   @Autowired
   JwtService jwtService;
 
-  public ResponseEntity<ResponseEmpList> findAll(String token) {
-    ResponseEmpList response = new ResponseEmpList();
+  public ResponseEntity<ResEmpList> findAll(String token) {
+    ResEmpList response = new ResEmpList();
     if (!Common.checkNotNull(token)) {
       response.setMessage(StrConstant.TOKEN_NOT_FOUND);
       response.setStatus(ApiConstant.INVALID_REQUEST_CODE);
@@ -74,8 +76,8 @@ public class EmpService implements IEmpService {
     return new ResponseEntity<>(response, HttpStatus.OK);
   }
 
-  public ResponseEntity<ResponseEmpList> findByNameContaining(String token, String name) {
-    ResponseEmpList response = new ResponseEmpList();
+  public ResponseEntity<ResEmpList> findByNameContaining(String token, String name) {
+    ResEmpList response = new ResEmpList();
     List<Employee> empRepoList = empRepository.findByNameContaining(name);
     List<EmpData> empList = new ArrayList<>();
     for (Employee e : empRepoList) {
@@ -92,9 +94,35 @@ public class EmpService implements IEmpService {
     return empRepository.findById(id);
   }
 
-  public Employee save(Employee emp) {
-    emp.setEmpId(sequenceGeneratorService.generateSequence(Employee.SEQUENCE_NAME));
-    return empRepository.save(emp);
+  public ResponseEntity<ResponseBase> save(Employee emp) {
+    ResponseBase response = new ResponseBase();
+    String statusMessage = null;
+    int statusCode = 0;
+
+    if (!Common.checkNotNull(emp.getMobile())) {
+      statusCode = -1;
+      statusMessage = "Invalid mobile number.";
+    } else if (!Common.validMobile(emp.getMobile())) {
+      statusCode = -1;
+      statusMessage = "Please enter correct mobile number.";
+    } else if (!Common.checkNotNull(emp.getName())) {
+      statusCode = -1;
+      statusMessage = "Please enter correct mobile number.";
+    } else {
+      emp.setEmpId(sequenceGeneratorService.generateSequence(Employee.SEQUENCE_NAME));
+      try {
+        Employee e = empRepository.save(emp);
+        statusCode = 1;
+        statusMessage = StrConstant.INSERT_SUCCESS;
+      } catch (Exception e) {
+        e.printStackTrace();
+        statusCode = -1;
+        statusMessage = StrConstant.FAILED_TO_SAVE;
+      }
+      response.setStatus(statusCode);
+      response.setMessage(statusMessage);
+    }
+    return new ResponseEntity<>(response, HttpStatus.OK);
   }
 
   public Employee update(Long id, Employee emp) {
@@ -157,15 +185,16 @@ public class EmpService implements IEmpService {
         requestLogin.getPassword());
     if (empRepo.isPresent()) {
       Employee emp = empRepo.get();
-      LoginData userData = new LoginData();
-      userData.setEmpId(emp.getEmpId());
-      userData.setEmail(emp.getEmail());
-      userData.setMobile(emp.getMobile());
-      userData.setName(emp.getName());
-      userData.setActive(emp.isActive());
-      userData.setAdmin(emp.isAdmin());
-      userData.setCreatedAt(emp.getCreatedAt());
-      userData.setUpdatedAt(emp.getUpdatedAt());
+      LoginData loginData = new LoginData();
+      loginData.setEmpId(emp.getEmpId());
+      loginData.setEmail(emp.getEmail());
+      loginData.setMobile(emp.getMobile());
+      loginData.setAddress(emp.getAddress());
+      loginData.setName(emp.getName());
+      loginData.setActive(emp.isActive());
+      loginData.setAdmin(emp.isAdmin());
+      loginData.setCreatedAt(emp.getCreatedAt());
+      loginData.setUpdatedAt(emp.getUpdatedAt());
       try {
         AuthScope scope;
         String token = null;
@@ -175,7 +204,7 @@ public class EmpService implements IEmpService {
           scope = AuthScope.USER;
         }
         token = jwtService.generateToken(emp, scope);
-        userData.setToken(token);
+        loginData.setToken(token);
       } catch (Exception e) {
         e.printStackTrace();
       }
@@ -185,7 +214,7 @@ public class EmpService implements IEmpService {
       // emailService.sendEmailOTP(user.getEmailId(), otpString);
       // user.setOtp(otpString);
 
-      responseLogin.setLoginData(userData);
+      responseLogin.setLoginData(loginData);
       responseLogin.setMessage(StrConstant.SUCCESS);
       responseLogin.setStatus(ApiConstant.SUCCESS_CODE);
     } else {

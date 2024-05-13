@@ -1,4 +1,4 @@
-package com.springboot.empc.entity;
+package com.springboot.empc.model;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;

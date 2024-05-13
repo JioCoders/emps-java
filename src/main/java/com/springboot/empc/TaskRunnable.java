@@ -1,54 +1,62 @@
 package com.springboot.empc;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 
+import com.springboot.empc.entity.Address;
 import com.springboot.empc.entity.Employee;
-import com.springboot.empc.service.api.EmpService;
+import com.springboot.empc.repository.EmpRepository;
+import com.springboot.empc.service.SequenceGeneratorService;
 
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class TaskRunnable implements CommandLineRunner {
 
-    @Autowired
-    EmpService emplyeeService;
+	@Autowired
+	EmpRepository empRepository;
+	
+	@Autowired
+	SequenceGeneratorService sequenceGeneratorService;
 
-    @Override
-    public void run(String... args) throws Exception {
-        log.info("---------> Inserting dummy data in Employee table");
-        emplyeeService.save(
-                new Employee("Ramesh", "Fadatare", "8888888889", "112233", "332211", "ramesh@gmail.com",
-                        true, false, 1715283934L, 1715283934L));
-        emplyeeService.save(
-                new Employee("Tom", "Cruise", "8888888889", "112233", "332211", "tom@gmail.com", true, false,
-                        1715283934L, 1715283934L));
-        emplyeeService.save(
-                new Employee("John", "Cena", "8888888889", "112233", "332211", "john@gmail.com", true, false,
-                        1715283934L, 1715283934L));
-        emplyeeService.save(
-                new Employee("tony", "stark", "8888888889", "112233", "332211", "stark@gmail.com", true, false,
-                        1715283934L, 1715283934L));
+	@Override
+	public void run(String... args) throws Exception {
+		if (empRepository.count() == 0) {
+			insertData();
+		}
+		long id1 = 1L;
+		empRepository.findById(id1).ifPresent(System.out::println);
 
-        long id1 = 1L;
-        emplyeeService.findById(id1).ifPresent(System.out::println);
+		long id2 = 5L;
+		Optional<Employee> optional = empRepository.findById(id2);
+		if (optional.isPresent()) {
+			System.out.println(optional.get());
+		} else {
+			System.out.printf("No employee found with id %d%n", id2);
+		}
 
-        long id2 = 5L;
-        Optional<Employee> optional = emplyeeService.findById(id2);
+		List<Employee> employees = empRepository.findAll();
+		employees.forEach(employee -> System.out.println(employee.toString()));
+		// empRepository.deleteAll();
+	}
 
-        if (optional.isPresent()) {
-            System.out.println(optional.get());
-        } else {
-            System.out.printf("No employee found with id %d%n", id2);
-        }
+	void insertData() {
+		Address address = new Address("House no 140", "Sector-40", "Gurgaon", "Haryana", "122003");
+		Employee e1 = new Employee("Ramesh", address, "8888888889", "112233", "332211",
+				"ramesh@gmail.com",
+				true, true, 1715283934L, 1715283934L);
+		e1.setEmpId(sequenceGeneratorService.generateSequence(Employee.SEQUENCE_NAME));
+		empRepository.save(e1);
 
-        // List<Employee> employees = emplyeeService.findAll();
-        // employees.forEach(employee -> System.out.println(employee.toString()));
-        log.info("---------> Initial data inserted in Employee table");
-
-        // emplyeeService.deleteById(3L);
-    }
+		Employee e2 = new Employee("Tom", address, "8888899999", "112233", "332211",
+				"tom@gmail.com", true, false,
+				1715283934L, 1715283934L);
+		e2.setEmpId(sequenceGeneratorService.generateSequence(Employee.SEQUENCE_NAME));
+		empRepository.save(e2);
+		log.info("=========> Inserted dummy data in Employee table");
+	}
 
 }

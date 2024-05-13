@@ -15,5 +15,4 @@ public interface EmpRepository extends MongoRepository<Employee, Long> {
   List<Employee> findByNameContaining(String title);
 
   Optional<Employee> findFirstByEmailAndPassword(String email, String password);
-
 }

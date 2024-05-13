@@ -7,18 +7,19 @@ import java.util.Optional;
 import org.springframework.http.ResponseEntity;
 
 import com.springboot.empc.entity.Employee;
+import com.springboot.empc.model.ResponseBase;
 import com.springboot.empc.model.req.ReqLogin;
 import com.springboot.empc.model.res.ResLogin;
-import com.springboot.empc.model.res.ResponseEmpList;
+import com.springboot.empc.model.res.ResEmpList;
 
 public interface IEmpService {
-    public ResponseEntity<ResponseEmpList> findAll(String token);
+    public ResponseEntity<ResEmpList> findAll(String token);
 
-    public ResponseEntity<ResponseEmpList> findByNameContaining(String token, String name);
+    public ResponseEntity<ResEmpList> findByNameContaining(String token, String name);
 
     public Optional<Employee> findById(Long id);
 
-    public Employee save(Employee emp);
+    public ResponseEntity<ResponseBase> save(Employee emp);
 
     public Employee update(Long id, Employee emp);
 

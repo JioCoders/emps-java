@@ -1,5 +1,7 @@
 package com.springboot.empc.model.res.data;
 
+import com.springboot.empc.entity.Address;
+
 import lombok.Data;
 
 @Data
@@ -10,7 +12,7 @@ public class LoginData {
     String mobile;
     String password;
     String otp;
-    String address;
+    Address address;
     boolean isActive;
     boolean isAdmin;
     Long createdAt;

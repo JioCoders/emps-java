@@ -1,5 +1,7 @@
 package com.springboot.empc.controller;
 
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
+
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -20,11 +22,11 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.springboot.empc.entity.Employee;
+import com.springboot.empc.model.ResponseBase;
 import com.springboot.empc.model.req.ReqLogin;
+import com.springboot.empc.model.res.ResEmpList;
 import com.springboot.empc.model.res.ResLogin;
-import com.springboot.empc.model.res.ResponseEmpList;
 import com.springboot.empc.service.api.IEmpService;
-import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 // @CrossOrigin(origins = "http://localhost:8081")
 @RestController
@@ -36,7 +38,7 @@ public class EmpController {
 
   @GetMapping("/emp")
   @ResponseStatus(HttpStatus.OK)
-  public ResponseEntity<ResponseEmpList> getAllEmp(@RequestHeader(AUTHORIZATION) String token,
+  public ResponseEntity<ResEmpList> getAllEmp(@RequestHeader(AUTHORIZATION) String token,
       @RequestParam(required = false) String title) {
     if (title == null)
       return iService.findAll(token);
@@ -58,9 +60,10 @@ public class EmpController {
 
   @PostMapping("/emp")
   @ResponseStatus(HttpStatus.CREATED)
-  public Employee createEmployee(@RequestBody Employee emp) {
+  public ResponseEntity<ResponseBase> createEmployee(@RequestBody Employee emp) {
     return iService
-        .save(new Employee(emp.getName(), emp.getAddress(), emp.getMobile(), emp.getPassword(), "332211", emp.getEmail(), true, false,
+        .save(new Employee(emp.getName(), emp.getAddress(), emp.getMobile(), emp.getPassword(), "332211",
+            emp.getEmail(), true, false,
             System.currentTimeMillis(), System.currentTimeMillis()));
   }
 

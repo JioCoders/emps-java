@@ -5,6 +5,7 @@ public class StrConstant {
     public static final String TOKEN_NOT_FOUND = "Token not provided!";
     public static final String INVALID_TOKEN = "Invalid token or expired!";
     public static final String DUPLICATE_ENTRY = "Duplicate entry!";
+    public static final String FAILED_TO_SAVE = "Failed to save!";
     public static final String FAILED_TO_SUBMIT = "Failed to submit, please try again!";
     public static final String REQUEST_PARAMETER_EMPTY = "Request parameter empty";
     public static final String INVALID_EMAIL = "Invalid email id!";
