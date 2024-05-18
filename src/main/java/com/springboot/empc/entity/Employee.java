@@ -1,5 +1,7 @@
 package com.springboot.empc.entity;
 
+import java.util.Date;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -39,11 +41,15 @@ public class Employee {
   Long createdAt;
   @Field(name = "updated_at")
   Long updatedAt;
+  @Field(name = "request_date")
+  String requestDate;
+  @Field(name = "req_date")
+  Date reqDate;
 
   public Employee(String name, Address address, String mobile, String password, String otp, String email,
       boolean active,
       boolean isAdmin,
-      long createdAt, long updatedAt) {
+      long createdAt, long updatedAt, String requestDate, Date reqDate) {
     this.name = name;
     this.address = address;
     this.mobile = mobile;
@@ -54,6 +60,8 @@ public class Employee {
     this.isAdmin = isAdmin;
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
+    this.requestDate = requestDate;
+    this.reqDate = reqDate;
   }
 
 }

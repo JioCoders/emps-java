@@ -36,7 +36,7 @@ public class EmpController {
   @Autowired
   IEmpService iService;
 
-  @GetMapping("/emp")
+  @GetMapping("/emp-token")
   @ResponseStatus(HttpStatus.OK)
   public ResponseEntity<ResEmpList> getAllEmp(@RequestHeader(AUTHORIZATION) String token,
       @RequestParam(required = false) String title) {
@@ -44,6 +44,15 @@ public class EmpController {
       return iService.findAll(token);
     else
       return iService.findByNameContaining(token, title);
+  }
+
+  @GetMapping("/emp")
+  @ResponseStatus(HttpStatus.OK)
+  public ResponseEntity<ResEmpList> getAllEmpb(@RequestParam(required = false) String title) {
+    if (title == null)
+      return iService.findAll("");
+    else
+      return iService.findByNameContaining("", title);
   }
 
   @GetMapping("/emp/{id}")
@@ -64,7 +73,7 @@ public class EmpController {
     return iService
         .save(new Employee(emp.getName(), emp.getAddress(), emp.getMobile(), emp.getPassword(), "332211",
             emp.getEmail(), true, false,
-            System.currentTimeMillis(), System.currentTimeMillis()));
+            System.currentTimeMillis(), System.currentTimeMillis(), emp.getRequestDate(), emp.getReqDate()));
   }
 
   @PutMapping("/emp/{id}")

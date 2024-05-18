@@ -11,6 +11,6 @@ spring:
     - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
   data:
     mongodb:
-      uri: <?
+      uri: <your uri>
       database: tododb
       authentication-database: admin

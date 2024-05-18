@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -17,8 +16,8 @@ import org.springframework.stereotype.Service;
 import com.springboot.empc.entity.Employee;
 import com.springboot.empc.model.ResponseBase;
 import com.springboot.empc.model.req.ReqLogin;
-import com.springboot.empc.model.res.ResLogin;
 import com.springboot.empc.model.res.ResEmpList;
+import com.springboot.empc.model.res.ResLogin;
 import com.springboot.empc.model.res.data.EmpData;
 import com.springboot.empc.model.res.data.LoginData;
 import com.springboot.empc.repository.EmpRepository;
@@ -46,23 +45,23 @@ public class EmpService implements IEmpService {
 
   public ResponseEntity<ResEmpList> findAll(String token) {
     ResEmpList response = new ResEmpList();
-    if (!Common.checkNotNull(token)) {
-      response.setMessage(StrConstant.TOKEN_NOT_FOUND);
-      response.setStatus(ApiConstant.INVALID_REQUEST_CODE);
-      return new ResponseEntity<>(response, HttpStatus.OK);
-    }
+    // if (!Common.checkNotNull(token)) {
+    // response.setMessage(StrConstant.TOKEN_NOT_FOUND);
+    // response.setStatus(ApiConstant.INVALID_REQUEST_CODE);
+    // return new ResponseEntity<>(response, HttpStatus.OK);
+    // }
 
-    // CHECK ADMIN USER
-    String bearer = jwtService.resolveToken(token);
-    if (!jwtService.validateToken(bearer, AuthScope.USER)
-        && !jwtService.validateToken(bearer, AuthScope.ADMIN)) {
-      response.setMessage(StrConstant.UN_AUTHORISE_ACCESS);
-      response.setStatus(ApiConstant.INVALID_REQUEST_CODE);
-      return new ResponseEntity<>(response, HttpStatus.OK);
-    }
+    // // CHECK ADMIN USER
+    // String bearer = jwtService.resolveToken(token);
+    // if (!jwtService.validateToken(bearer, AuthScope.USER)
+    // && !jwtService.validateToken(bearer, AuthScope.ADMIN)) {
+    // response.setMessage(StrConstant.UN_AUTHORISE_ACCESS);
+    // response.setStatus(ApiConstant.INVALID_REQUEST_CODE);
+    // return new ResponseEntity<>(response, HttpStatus.OK);
+    // }
     // CHECK VALID USER ID
-    int loginUserId = Integer.parseInt(jwtService.extractUserId(bearer));
-    log.info("UserId={}", loginUserId);
+    // int loginUserId = Integer.parseInt(jwtService.extractUserId(bearer));
+    // log.info("UserId={}", loginUserId);
 
     List<Employee> empRepoList = empRepository.findAll();
     List<EmpData> empList = new ArrayList<>();
@@ -112,6 +111,7 @@ public class EmpService implements IEmpService {
       emp.setEmpId(sequenceGeneratorService.generateSequence(Employee.SEQUENCE_NAME));
       try {
         Employee e = empRepository.save(emp);
+        log.info("Data Inserted " + e.toString());
         statusCode = 1;
         statusMessage = StrConstant.INSERT_SUCCESS;
       } catch (Exception e) {

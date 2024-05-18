@@ -1,5 +1,6 @@
 package com.springboot.empc;
 
+import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,7 +19,7 @@ public class TaskRunnable implements CommandLineRunner {
 
 	@Autowired
 	EmpRepository empRepository;
-	
+
 	@Autowired
 	SequenceGeneratorService sequenceGeneratorService;
 
@@ -47,13 +48,13 @@ public class TaskRunnable implements CommandLineRunner {
 		Address address = new Address("House no 140", "Sector-40", "Gurgaon", "Haryana", "122003");
 		Employee e1 = new Employee("Ramesh", address, "8888888889", "112233", "332211",
 				"ramesh@gmail.com",
-				true, true, 1715283934L, 1715283934L);
+				true, true, 1715283934L, 1715283934L, "2024-05-14 17:05:00", Calendar.getInstance().getTime());
 		e1.setEmpId(sequenceGeneratorService.generateSequence(Employee.SEQUENCE_NAME));
 		empRepository.save(e1);
 
 		Employee e2 = new Employee("Tom", address, "8888899999", "112233", "332211",
 				"tom@gmail.com", true, false,
-				1715283934L, 1715283934L);
+				1715283934L, 1715283934L, "2024-05-14 16:05:00", Calendar.getInstance().getTime());
 		e2.setEmpId(sequenceGeneratorService.generateSequence(Employee.SEQUENCE_NAME));
 		empRepository.save(e2);
 		log.info("=========> Inserted dummy data in Employee table");
